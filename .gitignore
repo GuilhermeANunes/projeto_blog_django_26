@@ -1,0 +1,31 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments (highly recommended to ignore)
+venv/
+.venv/
+env/
+ENV/
+
+# Sensitive Information & Environment Variables
+.env
+local_settings.py
+
+# Database (keep local dev data out of production)
+db.sqlite3
+*.db
+
+# Media & Static files
+/media/
+/static/  # Often ignored if collected for production
+staticfiles/
+
+# System-specific & Editor files
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+*.log
