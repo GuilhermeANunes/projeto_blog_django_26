@@ -16,6 +16,7 @@ local_settings.py
 # Database (keep local dev data out of production)
 db.sqlite3
 *.db
+/data/
 
 # Media & Static files
 /media/

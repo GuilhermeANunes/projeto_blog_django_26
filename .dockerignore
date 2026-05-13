@@ -1,0 +1,37 @@
+# Python artifacts
+**/__pycache__/
+**/*.py[cod]
+*$py.class
+**/*.so
+
+# Environments and dependencies
+.venv/
+venv/
+env/
+ENV/
+bin/
+lib/
+include/
+
+# Git and configuration
+.git
+.gitignore
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Django specific
+db.sqlite3
+/staticfiles/
+/mediafiles/
+local_settings.py
+
+# Sensitive data
+.env
+*.sql.gz
+
+# IDEs and OS files
+.idea/
+.vscode/
+.project
+.DS_Store
