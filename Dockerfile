@@ -1,4 +1,4 @@
-FROM python:3.12-alpine3.20
+FROM python:3.12-slim
 LABEL mantainer='gui_augustonunes@outlook.com'
 
 # Essa variável de ambiente é usada para controlar se o Python deve 
@@ -27,27 +27,26 @@ EXPOSE 8000
 # Agrupar os comandos em um único RUN pode reduzir a quantidade de camadas da 
 # imagem e torná-la mais eficiente.
 # Instala as dependências necessárias para compilar o psycopg2 e drivers C
-RUN apk add --no-cache \
-    postgresql-client \
-    build-base \
-    postgresql-dev \
-    musl-dev \
-    python3-dev \
-    libffi-dev \
-    linux-headers
 
-RUN python -m venv /venv && \
-  /venv/bin/pip install --upgrade pip && \
-  /venv/bin/pip install -r /djangoapp/requirements.txt && \
-  adduser --disabled-password --no-create-home duser && \
-  mkdir -p /data/web/static && \
-  mkdir -p /data/web/media && \
-  chown -R duser:duser /venv && \
-  chown -R duser:duser /data/web/static && \
-  chown -R duser:duser /data/web/media && \
-  chmod -R 755 /data/web/static && \
-  chmod -R 755 /data/web/media && \
-  chmod -R +x /scripts
+RUN apt-get update && apt-get install -y \
+    postgresql-client \
+    libpq-dev \
+    gcc \
+    python3-dev \
+    netcat-openbsd \
+    && rm -rf /var/lib/apt/lists/* && \
+    python -m venv /venv && \
+    /venv/bin/pip install --upgrade pip && \
+    /venv/bin/pip install -r /djangoapp/requirements.txt && \
+    adduser --disabled-password --no-create-home duser && \
+    mkdir -p /data/web/static && \
+    mkdir -p /data/web/media && \
+    chown -R duser:duser /venv && \
+    chown -R duser:duser /data/web/static && \
+    chown -R duser:duser /data/web/media && \
+    chmod -R 755 /data/web/static && \
+    chmod -R 755 /data/web/media && \
+    chmod -R +x /scripts
 
 # Adiciona a pasta scripts e venv/bin 
 # no $PATH do container.
