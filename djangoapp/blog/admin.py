@@ -1,6 +1,6 @@
 from django.contrib import admin
 from site_setup.models import MenuLinks, SiteSetup
-from blog.models import Tag, Category, Page
+from blog.models import Tag, Category, Page, Post
 
 # Register your models here.
 # @admin.register(MenuLinks)
@@ -53,3 +53,24 @@ class PageAdmin(admin.ModelAdmin):
     prepopulated_fields = {
         'slug': ('title',),
     }
+
+@admin.register(Post)
+class PostAdmin(admin.ModelAdmin):
+    list_display = 'id', 'title', 'slug', 'is_published', 'created_by',
+    list_display_links = 'title',
+    search_fields = 'id', 'title', 'slug', 'excerpt', 'content',
+    list_filter = 'category', 'is_published',
+    list_per_page = 50
+    list_editable = 'is_published',
+    ordering = '-id',
+    readonly_fields = 'created_at', 'created_by', 'updated_at',  'updated_by',
+    prepopulated_fields = {
+        'slug': ('title',),
+    }
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.created_by = request.user
+        else:
+            obj.updated_by = request.user
+        obj.save()
