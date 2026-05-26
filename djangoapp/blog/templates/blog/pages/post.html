@@ -59,15 +59,18 @@
         <div class="single-post-content">
           {{ post.content|safe }}
         
-          <div class="post-tags">
-            <span>Tags: </span>
-            <a class="post-tag-link" href="#">
-              <i class="fa-solid fa-link"></i>
-              <span>{{post.tag}}</span>
-            </a>
+          {% if post.tags.all.exists %}
+            <div class="post-tags">
+              <span>Tags: </span>
+              {% for tag in post.tags.all %}
+                <a class="post-tag-link" href="{% url "blog:tag" tag.slug %}">
+                  <i class="fa-solid fa-link"></i>
+                  <span>{{tag.name}}</span>
+                </a>
+              {% endfor %}
+            </div>
+          {% endif %}
 
-          </div>
-          
         </div>
       
       </div>

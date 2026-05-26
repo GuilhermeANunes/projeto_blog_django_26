@@ -37,7 +37,7 @@ class Tag(models.Model):
             self.slug = slugfy_new(self.name, 5)
         return super().save(*args, **kwargs)
     
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
     
 class Category(models.Model):
@@ -114,7 +114,7 @@ class Post(models.Model):
     category = models.ForeignKey(
         Category ,on_delete=models.SET_NULL, null=True, blank=True, default=None,
     )
-    tag = models.ManyToManyField(Tag, blank=True, default='')
+    tags = models.ManyToManyField(Tag, blank=True, default='')
 
     def save(self, *args, **kwargs):
         if not self.slug:
