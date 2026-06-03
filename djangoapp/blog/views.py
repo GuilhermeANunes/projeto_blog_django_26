@@ -1,7 +1,7 @@
 from typing import Any
 from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from blog.models import Post, Page
 from django.db.models import Q
 from django.http import Http404
@@ -154,14 +154,21 @@ class PageDetailView(DetailView):
         return super().get_queryset().filter(is_published=True)
 
 
-def post(request, slug):
-    post = Post.objects.get_published().filter(slug=slug).first()
-    page_title = 'Post - ' + post.title + ' - '
-    return render(
-        request,
-        'blog/pages/post.html',
-        {
-            'post': post,
-            'page_title': page_title,
-        }
-    )
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/pages/post.html'
+    slug_field = 'slug'
+    context_object_name = 'post'
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        post = self.get_object()
+
+        ctx.update({
+            'page_title': 'Pagina - ' + post.title + ' - ',
+        })
+        
+        return ctx
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return super().get_queryset().filter(is_published=True)
