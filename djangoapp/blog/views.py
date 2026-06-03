@@ -1,12 +1,11 @@
 from typing import Any
 from django.contrib.auth.models import User
 from django.db.models.query import QuerySet
-from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from blog.models import Post, Page
 from django.db.models import Q
 from django.http import Http404
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 PER_PAGE = 9
 
@@ -85,20 +84,39 @@ class TagListView(PostListView):
 
         return ctx
 
+class SearchListView(PostListView):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self._search_value = ''
 
-def search(request):
-    search_value = request.GET.get('search', '').strip()
-    posts = Post.objects.get_published().filter(Q(title__icontains=search_value) | Q(excerpt__icontains=search_value) | Q(content__icontains=search_value))[0:PER_PAGE]
+    def setup(self, request, *args, **kwargs):
+        self._search_value = request.GET.get('search', '').strip()
+        return super().setup(request, *args, **kwargs)
 
-    return render(
-        request,
-        'blog/pages/index.html',
-        {
-            'page_obj': posts,
+    def get_queryset(self):
+        search_value = self._search_value
+        return super().get_queryset().filter(
+            Q(title__icontains=search_value) 
+            | Q(excerpt__icontains=search_value) 
+            | Q(content__icontains=search_value)
+            )[0:PER_PAGE]
+    
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        search_value = self._search_value
+
+        ctx.update({
             'search_value': search_value,
-            'page_title': 'Search - ',
-        }
-    )
+            'page_title': f'Search - {search_value[:30]} - ',
+        })
+        return ctx
+    
+    def get(self, request, *args, **kwargs):
+        if self._search_value == '':
+            return redirect('blog:index')
+        
+        return super().get(self, request, *args, **kwargs)
+
 
 class CategoryListView(PostListView):
     allow_empty = False
@@ -116,18 +134,24 @@ class CategoryListView(PostListView):
 
         return ctx
 
+class PageDetailView(DetailView):
+    model = Page
+    template_name = 'blog/pages/page.html'
+    slug_field = 'slug'
+    context_object_name = 'page'
 
-def page(request, slug):
-    page = Page.objects.filter(is_published=True).filter(slug=slug).first()
-    page_title = 'Pagina - ' + page.title + ' - '
-    return render(
-        request,
-        'blog/pages/page.html',
-        {
-            'page': page,
-            'page_title': page_title,
-        }
-    )
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        page = self.get_object()
+
+        ctx.update({
+            'page_title': 'Pagina - ' + page.title + ' - ',
+        })
+        
+        return ctx
+
+    def get_queryset(self) -> QuerySet[Any]:
+        return super().get_queryset().filter(is_published=True)
 
 
 def post(request, slug):
