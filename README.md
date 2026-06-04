@@ -19,3 +19,10 @@ I learned work in the all process of a web aplication, since develop ambient pre
 
 ## Projects for the Future
 Using this acquireds knowledges, i want make more robusts aplications, with more structured features and learn more about software develop, Software architeture, Data Science and CyberSecurity.
+
+## Author and Contacts
+I am Guilherme Nunes, Corporate Banking Manager and in a carreer transiotion to the Data Science.
+I have a large background and knowlegde in Corporate Finance, Finance analyses, Credit analyses and corporate analyses, also acounting.
+My experience is with relationship with medium and big companies (that BRL 50 milions to BRL 1 bilion of annually revenue), and i seek to aply that experience to Data Science work, generating value and contributing to the growth of companies trought data, but the right data.
+
+LinkedIn: https://www.linkedin.com/in/guilherme-nunes-cea-575596203
