@@ -20,29 +20,29 @@ I learned work in the all process of a web aplication, since develop environment
 ## How to Run Locally (Setup)
 To run this project on your local machine, you will need to have Docker and Docker Compose installed.
 
-1. Clone the repository:
+### 1. Clone the repository:
 
 Bash
 git clone git@github.com:GuilhermeANunes/projeto_blog_django_26.git
 cd your-repository-name
 
-2. Configure the environment variables:
+### 2. Configure the environment variables:
    
 Create a .env file in the root directory. You can use a .env.example file as a reference to set up your PostgreSQL database credentials and your Django secret key.
 
-4. Build and start the containers:
+### 3. Build and start the containers:
 
 Bash
 docker-compose up --build
 
-5. Create a superuser (to access the Admin area):
+### 4. Create a superuser (to access the Admin area):
 
 With the containers running, open a new terminal window/tab and apply the database migrations:
 
 Bash
 docker-compose run --rm djangoapp python manage.py createsuperuser
 
-6. Access the application:
+### 5. Access the application:
    
 Open your web browser and navigate to http://localhost:8000
 To access the administrative panel and test its features, go to http://localhost:8000/admin/
